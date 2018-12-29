@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserAdvice.Data.Entities
 {
     public class Comment
     {
+        [Key]
         public int Id { get; set; }
 
         [ForeignKey(nameof(PostId))]
@@ -12,8 +14,9 @@ namespace UserAdvice.Data.Entities
         public int PostId { get; set; }
 
         [ForeignKey(nameof(CreatedById))]
-        public IdentityUser CreatedBy { get; set; }
+        public AppUser CreatedBy { get; set; }
         public string CreatedById { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public string Content { get; set; }
     }
