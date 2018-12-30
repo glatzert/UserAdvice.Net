@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using UserAdvice.Data;
+using UserAdvice.Data.Entities;
 
 namespace UserAdvice.Extensions
 {
@@ -13,11 +13,8 @@ namespace UserAdvice.Extensions
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-
+                    configuration.GetConnectionString("DefaultConnection")));
+            
             return services;
         }
     }

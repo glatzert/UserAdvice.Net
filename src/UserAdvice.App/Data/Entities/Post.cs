@@ -21,7 +21,7 @@ namespace UserAdvice.Data.Entities
 
         public List<PostTag> PostTags { get; set; }
 
-        [ForeignKey(nameof(Category))]
+        [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }
         public int? CategoryId { get; set; }
 

@@ -26,9 +26,9 @@ namespace UserAdvice.Data
             base.OnModelCreating(builder);
 
             builder.Entity<PostTag>()
-                   .HasKey(x => new { x.PostId, x.TagId });
+                .HasKey(x => new { x.PostId, x.TagId });
             builder.Entity<UserVote>()
-                   .HasKey(x => new { x.VoterId, x.PostId });
+                .HasKey(x => new { x.VoterId, x.PostId });
         }
         #endregion
     }
