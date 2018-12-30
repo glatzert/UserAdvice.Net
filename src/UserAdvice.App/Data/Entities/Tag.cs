@@ -11,7 +11,7 @@ namespace UserAdvice.Data.Entities
         public string Name { get; set; }
 
         public bool IsPublic { get; set; }
-        public string Color { get; set; }
+        public string BackgroundColor { get; set; }
 
         public List<PostTag> PostTags { get; set; }
     }

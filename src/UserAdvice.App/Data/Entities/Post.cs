@@ -17,16 +17,30 @@ namespace UserAdvice.Data.Entities
         public string CreatedById { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
 
+        public string Title { get; set; }
         public string Content { get; set; }
 
+        public bool IsClosed { get; set; }
+
         public List<PostTag> PostTags { get; set; }
+
 
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }
         public int? CategoryId { get; set; }
 
+        
         public int VoteCount { get; set; }
-
         public List<UserVote> Votes { get; set; }
+
+        public int CommentCount { get; set; }
+        public List<Comment> Comments { get; set; }
+
+
+        [ForeignKey(nameof(DuplicateOfId))]
+        public int? DuplicateOfId { get; set; }
+        public Post DuplicateOf { get; set; }
+
+
     }
 }

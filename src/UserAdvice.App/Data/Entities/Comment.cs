@@ -13,6 +13,10 @@ namespace UserAdvice.Data.Entities
         public Post Post { get; set; }
         public int PostId { get; set; }
 
+        [ForeignKey(nameof(StatusId))]
+        public Status Status { get; set; }
+        public int? StatusId { get; set; }
+
         [ForeignKey(nameof(CreatedById))]
         public AppUser CreatedBy { get; set; }
         public string CreatedById { get; set; }
