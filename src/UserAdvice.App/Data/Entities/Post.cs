@@ -20,8 +20,8 @@ namespace UserAdvice.Data.Entities
         public string Title { get; set; }
         public string Content { get; set; }
 
-        public bool IsClosed { get; set; }
-
+        public DateTimeOffset? ClosedAt { get; set; }
+        
         public List<PostTag> PostTags { get; set; }
 
 
@@ -40,7 +40,5 @@ namespace UserAdvice.Data.Entities
         [ForeignKey(nameof(DuplicateOfId))]
         public int? DuplicateOfId { get; set; }
         public Post DuplicateOf { get; set; }
-
-
     }
 }
