@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UserAdvice.Data;
 using UserAdvice.Data.Entities;
+using UserAdvice.Queries;
+using UserAdvice.Utilities;
 
 namespace UserAdvice.Extensions
 {
@@ -14,7 +16,16 @@ namespace UserAdvice.Extensions
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")));
-            
+
+            services.AddTransient<IClock, Clock>();
+
+            services.Scan(x =>
+                x.FromAssembliesOf(typeof(ServiceCollectionExtension))
+                 .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
+                 .AsImplementedInterfaces()
+                 .WithScopedLifetime()
+            );
+
             return services;
         }
     }

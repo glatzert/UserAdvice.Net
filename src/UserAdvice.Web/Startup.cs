@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UserAdvice.Data;
 using UserAdvice.Extensions;
+using UserAdvice.Data.Entities;
 
 namespace UserAdvice.Web
 {
@@ -37,9 +38,12 @@ namespace UserAdvice.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            
+            services.AddDefaultIdentity<AppUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
