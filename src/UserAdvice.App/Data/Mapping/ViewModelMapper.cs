@@ -14,12 +14,11 @@ namespace UserAdvice.Data.Mapping
             }).CreateMapper();
         }
 
-        public static ViewModel.PostTeaser ToViewModel(this Entities.Post post)
-        {
-            var result = _mapper.Map<ViewModel.PostTeaser>(post);
+        public static ViewModel.PostTeaser ToViewModel(this Entities.Post post) 
+            => _mapper.Map<ViewModel.PostTeaser>(post);
 
-            return result;
-        }
+        public static ViewModel.Category ToViewModel(this Entities.Category cat)
+            => _mapper.Map<ViewModel.Category>(cat);
 
         internal class MapperProfile : Profile
         {

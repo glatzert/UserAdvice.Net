@@ -13,13 +13,16 @@ namespace UserAdvice.Web.Pages
 {
     public class IndexModel : PageModel
     {
+        private readonly IQueryHandler<CategoryQuery, List<ViewModel.Category>> _categoryHandler;
         private readonly IQueryHandler<PostTeaserQuery, List<ViewModel.PostTeaser>> _postTeaserHandler;
 
         public IndexModel(
             IOptions<IndexOptions> options,
+            IQueryHandler<CategoryQuery, List<ViewModel.Category>> categoryHandler,
             IQueryHandler<PostTeaserQuery, List<ViewModel.PostTeaser>> postTeaserHandler)
         {
             Options = options.Value;
+            _categoryHandler = categoryHandler;
             _postTeaserHandler = postTeaserHandler;
         }
 
@@ -30,26 +33,48 @@ namespace UserAdvice.Web.Pages
         public IndexOptions Options { get; }
 
         public List<ViewModel.PostTeaser> Posts { get; } = new List<ViewModel.PostTeaser>();
+        public ViewModel.Category CurrentCategory { get; private set; }
+
         public List<ViewModel.Category> Categories { get; } = new List<ViewModel.Category>();
 
-
-        public async Task OnGet(int? categoryId)
+        public async Task OnGet(string categoryUrl)
         {
-            if (!Options.HidePosts)
+            await LoadCategories(categoryUrl);
+            if(!string.IsNullOrEmpty(categoryUrl) && CurrentCategory == null)
             {
-                var query = new PostTeaserQuery(categoryId, User)
-                {
-                    IgnoreCategoryIfNull = Options.IncludeAllCategories,
-                    PageNumber = PageNumber ?? 0
-                };
-
-                var result = await _postTeaserHandler.Execute(query);
-
-                if (result == null)
-                    NotFound();
-
-                Posts.AddRange(result);
+                NotFound();
+                return;
             }
+
+            if (CurrentCategory != null || !Options.HidePosts)
+            {
+                await LoadPosts();
+            }
+        }
+
+        public async Task LoadCategories(string categoryUrl)
+        {
+            var query = new CategoryQuery(User);
+
+            var result = await _categoryHandler.Execute(query);
+            
+            if(!string.IsNullOrEmpty(categoryUrl))
+            {
+                CurrentCategory = result
+                    .FirstOrDefault(x => string.Equals(x.UrlSegment, categoryUrl));
+            }
+        }
+
+        public async Task LoadPosts()
+        {
+            var query = new PostTeaserQuery(CurrentCategory?.Id, User)
+            {
+                IgnoreCategoryIfNull = Options.IncludeAllCategories,
+                PageNumber = PageNumber ?? 0
+            };
+
+            var result = await _postTeaserHandler.Execute(query);
+            Posts.AddRange(result);
         }
     }
 }
