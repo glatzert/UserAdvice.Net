@@ -63,6 +63,8 @@ namespace UserAdvice.Web.Pages
                 CurrentCategory = result
                     .FirstOrDefault(x => string.Equals(x.UrlSegment, categoryUrl));
             }
+
+            Categories.AddRange(result);
         }
 
         public async Task LoadPosts()
