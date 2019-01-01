@@ -6,24 +6,32 @@
 
 @if (Model.Categories.Any())
 {
-<div class="row">
-    @foreach (var cat in Model.Categories)
-    {
-    <div class="col-md-6 col-lg-4">
-        <div class="media">
-            <img alt="Category Logo" src="@cat.LogoUrl" />
-
-            <div class="media-body">
-                <h2>@cat.Name</h2>
-                    @cat.Description
+    <div class="row">
+        @foreach (var cat in Model.Categories)
+        {
+            <div class="col-lg-6 mt-3">
+                <div class="card">
+                    <div class="card-header">@cat.Name</div>
+                    <div class="card-body">
+                        <div class="float-left mr-1 mb-1">
+                            <if condition="cat.LogoUrl">
+                                <img alt="Category Logo" src="@cat.LogoUrl" height="64" width="64" />
+                                <else>
+                                    <img alt="Category Logo" src="~/images/Logo.svg" height="64" width="64" />
+                                </else>
+                            </if>
+                        </div>
+                        <p class="card-text">
+                            <markdown source="@cat.Description" />
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
+        }
     </div>
-    }
-</div>
 }
 
-<div class="row">
+<div class="row mt-6">
     <div class="col-md-3">
         <h2>Application uses</h2>
         <ul>
