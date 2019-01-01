@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Linq;
 
 namespace UserAdvice.Data.Mapping
 {
@@ -24,10 +25,12 @@ namespace UserAdvice.Data.Mapping
         {
             public MapperProfile()
             {
-                CreateMap<Entities.Post, ViewModel.PostTeaser>();
+                CreateMap<Entities.Post, ViewModel.PostTeaser>()
+                    .ForMember(d => d.Tags, m => m.MapFrom(s => s.PostTags.Select(p => p.Tag)));
                 CreateMap<Entities.Comment, ViewModel.PostTeaser.StatusComment>();
                 CreateMap<Entities.Category, ViewModel.Category>();
                 CreateMap<Entities.Category, ViewModel.CategoryRef>();
+                CreateMap<Entities.Tag, ViewModel.TagRef>();
             }
         }
     }

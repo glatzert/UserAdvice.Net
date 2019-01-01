@@ -19,12 +19,16 @@ namespace UserAdvice.Web.TagHelpers
                 ? SimpleMarkdown
                 : FullMarkdown;
 
-            output.Content.SetContent(Markdown.ToHtml(Source, pipeline));
+            var renderedMarkdown = Markdown.ToHtml(Source, pipeline);
+
+            output.TagName = null;
+            output.Content.SetHtmlContent(renderedMarkdown);
         }
 
         static MarkdownTagHelper()
         {
             SimpleMarkdown = new MarkdownPipelineBuilder()
+                .DisableHtml()
                 .UseDefinitionLists()
                 .UseEmphasisExtras()
                 .UseListExtras()

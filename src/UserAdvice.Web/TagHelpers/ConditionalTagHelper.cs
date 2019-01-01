@@ -17,6 +17,11 @@ namespace UserAdvice.Web.TagHelpers
         {
             await base.ProcessAsync(context, output);
 
+            output.Attributes.RemoveAll("condition");
+
+            if (context.TagName.Equals("if", StringComparison.OrdinalIgnoreCase))
+                output.TagName = null;
+
             var ctx = ConditionalContext.GetFromContext(context);
             var innerContent = await output.GetChildContentAsync();
 
@@ -26,11 +31,6 @@ namespace UserAdvice.Web.TagHelpers
                     output.SuppressOutput();
                 else
                     output.Content.SetHtmlContent(ctx.ElseContent);
-            }
-            else
-            {
-                if (context.TagName.Equals("if", StringComparison.OrdinalIgnoreCase))
-                    output.Content.SetHtmlContent(innerContent);
             }
         }
 

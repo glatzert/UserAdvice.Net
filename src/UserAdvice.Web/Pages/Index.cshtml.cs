@@ -71,7 +71,7 @@ namespace UserAdvice.Web.Pages
         {
             var query = new PostTeaserQuery(CurrentCategory?.Id, User)
             {
-                IgnoreCategoryIfNull = Options.IncludeAllCategories,
+                IgnoreCategoryIfNull = !Options.IncludeAllCategories,
                 PageNumber = PageNumber ?? 0
             };
 

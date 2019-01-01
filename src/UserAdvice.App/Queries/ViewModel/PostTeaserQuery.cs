@@ -51,6 +51,7 @@ namespace UserAdvice.Queries.ViewModel
                 .AsNoTracking()
                 .Include(x => x.PostTags)
                     .ThenInclude(x => x.Tag)
+                .Include(x => x.Category)
                 .Where(x => ignoreCategory || x.CategoryId == query.CategoryId)
                 .OrderByDescending(x => x.CreatedAt)
                 .Skip(query.PageSize * query.PageNumber)
@@ -80,6 +81,11 @@ namespace UserAdvice.Queries.ViewModel
 
                 foreach (var r in result)
                     r.UserVoted = uservotes.Contains(r.Id);
+            }
+
+            if(!query.CurrentUser.IsAuthenticated())
+            {
+                //TODO: Remove non public Tags
             }
 
             return result.ToList();

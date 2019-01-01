@@ -5,6 +5,12 @@ namespace UserAdvice.ViewModel
 {
     public class PostTeaser
     {
+        public PostTeaser()
+        {
+            Tags = new List<TagRef>();
+            StatusComments = new List<StatusComment>();
+        }
+
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -19,8 +25,10 @@ namespace UserAdvice.ViewModel
 
         public CategoryRef Category { get; set; }
 
-        public List<StatusComment> StatusComments { get; set; }
+        public List<TagRef> Tags { get; set; }
 
+        public List<StatusComment> StatusComments { get; set; }
+        
         public class StatusComment
         {
             public string Content { get; set; }
