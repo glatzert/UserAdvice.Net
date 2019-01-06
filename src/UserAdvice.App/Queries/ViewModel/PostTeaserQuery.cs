@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using UserAdvice.Configuration;
 using UserAdvice.Data;
+using UserAdvice.Data.Entities;
 using UserAdvice.Data.Mapping;
 using UserAdvice.Extensions;
 using UserAdvice.ViewModel;
@@ -33,21 +35,22 @@ namespace UserAdvice.Queries.ViewModel
     internal class PostTeaserQueryHandler : IQueryHandler<PostTeaserQuery, List<PostTeaser>>
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ApplicationOptions _options;
 
         public PostTeaserQueryHandler(ApplicationDbContext dbContext,
-            IOptions<ApplicationOptions> options)
+            IOptions<ApplicationOptions> options, UserManager<AppUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
             _options = options.Value;
         }
 
         public async Task<List<PostTeaser>> Execute(PostTeaserQuery query)
         {
             var ignoreCategory = !query.CategoryId.HasValue && query.IgnoreCategoryIfNull;
-            var username = query.CurrentUser.FindFirstValue("name");
 
-            var posts = (await _dbContext.Posts
+            var posts = await _dbContext.Posts
                 .AsNoTracking()
                 .Include(x => x.PostTags)
                     .ThenInclude(x => x.Tag)
@@ -56,8 +59,7 @@ namespace UserAdvice.Queries.ViewModel
                 .OrderByDescending(x => x.CreatedAt)
                 .Skip(query.PageSize * query.PageNumber)
                 .Take(query.PageSize)
-                .ToListAsync())
-                .ToDictionary(x => x.Id);
+                .ToDictionaryAsync(x => x.Id);
 
             var statusComments = (await _dbContext.Comments
                 .AsNoTracking()
@@ -69,13 +71,15 @@ namespace UserAdvice.Queries.ViewModel
             foreach(var comments in statusComments)
                 posts[comments.Key].Comments = comments.ToList();
 
-            var result = posts.Select(x => x.Value.ToViewModel());
+            var result = posts.Select(x => x.Value.ToTeaserModel());
             
             if (query.CurrentUser.IsAuthenticated())
             {
+                var user = await _userManager.GetUserAsync(query.CurrentUser);
+
                 var uservotes = await _dbContext.UserVotes
                     .AsNoTracking()
-                    .Where(x => x.VoterId == username)
+                    .Where(x => x.VoterId == user.Id)
                     .Where(x => posts.Keys.Contains(x.PostId))
                     .Select(x => x.PostId)
                     .ToListAsync();

@@ -24,5 +24,7 @@ namespace UserAdvice.ViewModel
                     return "FFFFFF";
             }
         }
+
+        public bool IsPublic { get; set; }
     }
 }

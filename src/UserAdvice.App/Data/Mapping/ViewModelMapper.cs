@@ -15,8 +15,10 @@ namespace UserAdvice.Data.Mapping
             }).CreateMapper();
         }
 
-        public static ViewModel.PostTeaser ToViewModel(this Entities.Post post) 
+        public static ViewModel.PostTeaser ToTeaserModel(this Entities.Post post) 
             => _mapper.Map<ViewModel.PostTeaser>(post);
+        public static ViewModel.Post ToViewModel(this Entities.Post post)
+            => _mapper.Map<ViewModel.Post>(post);
 
         public static ViewModel.Category ToViewModel(this Entities.Category cat)
             => _mapper.Map<ViewModel.Category>(cat);
@@ -28,6 +30,8 @@ namespace UserAdvice.Data.Mapping
                 CreateMap<Entities.Post, ViewModel.PostTeaser>()
                     .ForMember(d => d.Tags, m => m.MapFrom(s => s.PostTags.Select(p => p.Tag)))
                     .ForMember(d => d.StatusComments, m => m.MapFrom(s => s.Comments));
+                CreateMap<Entities.Post, ViewModel.Post>()
+                    .ForMember(d => d.Tags, m => m.MapFrom(s => s.PostTags.Select(p => p.Tag)));
 
                 CreateMap<Entities.Category, ViewModel.Category>();
                 CreateMap<Entities.Category, ViewModel.CategoryRef>();
