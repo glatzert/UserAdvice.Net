@@ -88,9 +88,12 @@ namespace UserAdvice.Queries.ViewModel
                     r.UserVoted = uservotes.Contains(r.Id);
             }
 
-            if(!query.CurrentUser.IsAuthenticated())
+            foreach (var post in result)
             {
-                //TODO: Remove non public Tags
+                if (!query.CurrentUser.IsModerator(post.Category?.Id))
+                {
+                    post.Tags.RemoveAll(t => !t.IsPublic);
+                }
             }
 
             return result.ToList();

@@ -77,9 +77,9 @@ namespace UserAdvice.Queries.ViewModel
                     .AnyAsync(x => x.VoterId == user.Id && x.PostId == query.PostId);
             }
 
-            if (!query.CurrentUser.IsAuthenticated())
+            if (!query.CurrentUser.IsModerator(post.CategoryId))
             {
-                //TODO: Remove non public Tags
+                result.Tags.RemoveAll(t => !t.IsPublic);
             }
 
             return result;
