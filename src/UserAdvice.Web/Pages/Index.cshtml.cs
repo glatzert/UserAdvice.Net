@@ -17,11 +17,11 @@ namespace UserAdvice.Web.Pages
         private readonly IQueryHandler<PostTeaserQuery, List<ViewModel.PostTeaser>> _postTeaserHandler;
 
         public IndexModel(
-            IOptions<IndexOptions> options,
+            IOptions<ApplicationOptions> options,
             IQueryHandler<CategoryQuery, List<ViewModel.Category>> categoryHandler,
             IQueryHandler<PostTeaserQuery, List<ViewModel.PostTeaser>> postTeaserHandler)
         {
-            Options = options.Value;
+            Options = options.Value.IndexOptions;
             _categoryHandler = categoryHandler;
             _postTeaserHandler = postTeaserHandler;
         }

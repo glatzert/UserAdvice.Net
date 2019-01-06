@@ -6,7 +6,7 @@
     {
         <span class="badge d-block mb-1"
               style="background-color: #@(tag.BackgroundColor); color: #@(tag.ForegroundColor)">
-            @tag.Name
+            <i condition="!tag.IsPublic" class="fa fa-fw fa-lock"></i> @tag.Name
         </span>
     }
 }

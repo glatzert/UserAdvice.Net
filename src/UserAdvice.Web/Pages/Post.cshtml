@@ -1,0 +1,62 @@
+﻿@page "{postId:int}"
+@using Microsoft.Extensions.Options
+@using UserAdvice.Configuration
+@inject IOptions<ApplicationOptions> options
+@model UserAdvice.Web.Pages.PostModel
+@{
+    var categoryDescription = Model.Post.Category != null
+        ? Model.Post.Category
+        : (ViewModel.ICategory)options.Value;
+}
+
+<partial name="Category/_Description" model="categoryDescription" />
+
+<div class="border border-secondary mt-3">
+    <div class="d-flex flex-row bg-light border-bottom px-3 py-2">
+        <div class="flex-grow-1">
+            <h2 class="h3 m-0">
+                <a class="text-body" asp-page="Post" asp-route-postId="@Model.Post.Id">
+                    @Model.Post.Title
+                </a>
+                @if (!object.Equals(Model.Post.Category?.Id, ViewData["CategoryId"]))
+                {
+                    <small class="text-muted text-nowrap">@Model.Post.Category?.Name</small>
+                }
+            </h2>
+        </div>
+        <span class="d-block align-self-center text-muted">
+            <i class="fa fa-comments-o"></i> @Model.Post.Comments.Count
+        </span>
+    </div>
+    <div class="d-flex flex-row p-3">
+        <div class="mr-3">
+            <partial name="Post/_VoteCount" model="Model.Post" />
+        </div>
+        <div class="flex-grow-1">
+            <div class="row">
+                <div class="col">
+                    <markdown mode="Simple" source="@Model.Post.Content" />
+                </div>
+                @if (Model.Post.Tags.Any())
+                {
+                    <div class="col col-3">
+                        <partial name="Post/_Tags" model="Model.Post.Tags" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    @if (Model.Post.Comments.Any())
+    {
+        var comments = Model.Post.Comments.OrderBy(x => x.CreatedAt);
+
+        <div class="mt-3 ml-5">
+            @foreach (var comment in comments)
+            {
+                <partial name="Post/_Comment" model="comment" />
+            }
+
+            <partial name="Post/_AddComment" />
+        </div>
+    }
+</div>
