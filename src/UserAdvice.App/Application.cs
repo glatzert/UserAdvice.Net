@@ -9,9 +9,9 @@ namespace UserAdvice
     {
         public static void MigrateDatabase(IServiceProvider serviceProvider)
         {
-            using (serviceProvider.CreateScope())
+            using (var scope = serviceProvider.CreateScope())
             {
-                var dbContext = serviceProvider
+                var dbContext = scope.ServiceProvider
                     .GetRequiredService<ApplicationDbContext>();
 
                 dbContext.Database.Migrate();

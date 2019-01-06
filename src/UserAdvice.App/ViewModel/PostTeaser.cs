@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UserAdvice.ViewModel
 {
-    public class PostTeaser
+    public class PostTeaser : IVotedPost
     {
         public PostTeaser()
         {
@@ -18,8 +18,8 @@ namespace UserAdvice.ViewModel
 
         public DateTimeOffset CreatedAt { get; set; }
 
-        public string VoteCount { get; set; }
-        public string CommentCount { get; set; }
+        public int VoteCount { get; set; }
+        public int CommentCount { get; set; }
 
         public bool UserVoted { get; set; }
 

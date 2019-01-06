@@ -1,0 +1,11 @@
+﻿@model ViewModel.IVotedPost
+
+<div class="text-center">
+    <if condition="Model.UserVoted">
+        <i class="fa fa-fw fa-chevron-up text-alert"></i>
+        <else>
+            <i class="fa fa-fw fa-chevron-up"></i>
+        </else>
+    </if><br />
+    <span class="text-large">@Model.VoteCount</span>
+</div>

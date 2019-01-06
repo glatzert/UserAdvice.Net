@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UserAdvice.ViewModel;
+﻿using UserAdvice.ViewModel;
 
 namespace UserAdvice.Configuration
 {
     public class ApplicationOptions
     {
+        public bool IPurchasedALicenseAndWantToRemoveTheFooter { get; }
+
         public IndexOptions IndexOptions { get; set; }
     }
 
