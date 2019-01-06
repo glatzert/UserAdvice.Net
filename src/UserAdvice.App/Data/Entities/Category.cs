@@ -15,5 +15,7 @@ namespace UserAdvice.Data.Entities
         public List<Post> Posts { get; set; }
 
         public string UrlSegment { get; set; }
+
+        public int PostCount { get; set; }
     }
 }

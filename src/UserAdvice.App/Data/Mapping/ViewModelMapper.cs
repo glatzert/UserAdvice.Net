@@ -26,11 +26,15 @@ namespace UserAdvice.Data.Mapping
             public MapperProfile()
             {
                 CreateMap<Entities.Post, ViewModel.PostTeaser>()
-                    .ForMember(d => d.Tags, m => m.MapFrom(s => s.PostTags.Select(p => p.Tag)));
-                CreateMap<Entities.Comment, ViewModel.PostTeaser.StatusComment>();
+                    .ForMember(d => d.Tags, m => m.MapFrom(s => s.PostTags.Select(p => p.Tag)))
+                    .ForMember(d => d.StatusComments, m => m.MapFrom(s => s.Comments));
+
                 CreateMap<Entities.Category, ViewModel.Category>();
                 CreateMap<Entities.Category, ViewModel.CategoryRef>();
-                CreateMap<Entities.Tag, ViewModel.TagRef>();
+
+                CreateMap<Entities.Comment, ViewModel.Comment>();
+                CreateMap<Entities.Status, ViewModel.Status>();
+                CreateMap<Entities.Tag, ViewModel.Tag>();
             }
         }
     }
