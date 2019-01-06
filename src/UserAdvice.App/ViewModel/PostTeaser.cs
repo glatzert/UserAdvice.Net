@@ -7,8 +7,8 @@ namespace UserAdvice.ViewModel
     {
         public PostTeaser()
         {
-            Tags = new List<TagRef>();
-            StatusComments = new List<StatusComment>();
+            Tags = new List<Tag>();
+            StatusComments = new List<Comment>();
         }
 
         public int Id { get; set; }
@@ -25,19 +25,8 @@ namespace UserAdvice.ViewModel
 
         public CategoryRef Category { get; set; }
 
-        public List<TagRef> Tags { get; set; }
+        public List<Tag> Tags { get; set; }
 
-        public List<StatusComment> StatusComments { get; set; }
-        
-        public class StatusComment
-        {
-            public string Content { get; set; }
-
-            public string StatusName { get; set; }
-            public string ForegroundColor { get; set; }
-
-            public string CreatedBy { get; set; }
-            public DateTimeOffset CreatedAt { get; set; }
-        }
+        public List<Comment> StatusComments { get; set; }
     }
 }

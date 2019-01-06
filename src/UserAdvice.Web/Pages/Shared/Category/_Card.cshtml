@@ -1,9 +1,16 @@
 ﻿@model ViewModel.Category
 
 <div class="border border-secondary">
-    <a class="d-block bg-light text-dark border-bottom px-3 py-2" asp-page="Index" asp-route-categoryUrl="@Model.UrlSegment">
-        <h2 class="h4 m-0">@Model.Name</h2>
-    </a>
+    <div class="d-flex bg-light text-body border-bottom px-3 py-2">
+        <h2 class="h4 flex-grow-1 m-0">
+            <a class="text-body" asp-page="Index" asp-route-categoryUrl="@Model.UrlSegment">
+                @Model.Name
+            </a>
+        </h2>
+        <span class="d-block align-self-center text-muted">
+            <i class="fa fa-files-o"></i> @Model.PostCount
+        </span>
+    </div>
     <div class="d-flex flex-row p-1">
         <div class="mr-3 mb-1">
             <if condition="Model.LogoUrl">

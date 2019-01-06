@@ -62,9 +62,10 @@ namespace UserAdvice.Queries.ViewModel
             var statusComments = (await _dbContext.Comments
                 .AsNoTracking()
                 .Include(x => x.CreatedBy)
+                .Include(x => x.Status)
                 .Where(x => x.StatusId.HasValue && posts.Keys.Contains(x.PostId))
                 .ToListAsync()).ToLookup(x => x.PostId);
-
+            
             foreach(var comments in statusComments)
                 posts[comments.Key].Comments = comments.ToList();
 

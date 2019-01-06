@@ -12,5 +12,7 @@
         public string LogoUrl { get; set; }
 
         public int SortKey { get; set; }
+
+        public int PostCount { get; set; }
     }
 }
