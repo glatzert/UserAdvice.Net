@@ -12,5 +12,14 @@ namespace UserAdvice.Extensions
 
             return principal.Identities.Any(i => i.IsAuthenticated);
         }
+
+        public static bool IsModerator(this ClaimsPrincipal principal, int? categoryId)
+        {
+            if (!principal.IsAuthenticated())
+                return false;
+
+            //TODO: Handle
+            return false;
+        }
     }
 }
