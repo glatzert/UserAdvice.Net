@@ -13,6 +13,14 @@ namespace UserAdvice.Web.TagHelpers
     {
         public object Condition { get; set; }
 
+        public override void Init(TagHelperContext context)
+        {
+            base.Init(context);
+
+            var ctx = ConditionalContext.GetFromContext(context);
+            ctx.NeedsElseContent = ShouldSuppress();
+        }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             await base.ProcessAsync(context, output);
@@ -25,7 +33,7 @@ namespace UserAdvice.Web.TagHelpers
             var ctx = ConditionalContext.GetFromContext(context);
             var innerContent = await output.GetChildContentAsync();
 
-            if (ShouldSuppress())
+            if (ctx.NeedsElseContent)
             {
                 if (ctx.ElseContent == null)
                     output.SuppressOutput();
@@ -49,7 +57,11 @@ namespace UserAdvice.Web.TagHelpers
         {
             var ctx = ConditionalContext.GetFromContext(context);
 
-            ctx.ElseContent = await output.GetChildContentAsync();
+            if (ctx.NeedsElseContent)
+            {
+                ctx.ElseContent = await output.GetChildContentAsync();
+            }
+
             output.SuppressOutput();
         }
     }
@@ -57,6 +69,7 @@ namespace UserAdvice.Web.TagHelpers
     class ConditionalContext
     {
         public IHtmlContent ElseContent { get; set; }
+        public bool NeedsElseContent { get; internal set; }
 
         public static ConditionalContext GetFromContext(TagHelperContext context)
         {

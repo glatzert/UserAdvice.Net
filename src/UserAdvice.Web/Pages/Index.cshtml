@@ -2,148 +2,47 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+
+    var isScoped = Model.CurrentCategory != null;
+    if (isScoped)
+    {
+        ViewData["CategoryId"] = Model.CurrentCategory.Id;
+    }
+    var showCategories = !isScoped && Model.Categories.Any();
+    var categoryDescription = isScoped ? Model.CurrentCategory : (ViewModel.ICategory)Model.Options;
+
+    var showPosts = isScoped || Model.Posts.Any();
 }
 
-@if (Model.CurrentCategory == null && Model.Categories.Any())
+@if (showCategories)
 {
-    <div class="row mt-3">
-        @foreach (var cat in Model.Categories.OrderByDescending(x => x.SortKey).ThenBy(x => x.Name))
-        {
-            <div class="col-lg-6 mt-3">
-                <div class="card">
-                    <div class="card-header font-weight-bold">@cat.Name</div>
-                    <div class="card-body">
-                        <div class="float-left mr-3 mb-1">
-                            <if condition="cat.LogoUrl">
-                                <img alt="Category Logo" src="@cat.LogoUrl" height="64" width="64" />
-                                <else>
-                                    <img alt="Category Logo" src="~/images/Logo.svg" height="64" width="64" />
-                                </else>
-                            </if>
-                        </div>
-                        <div class="card-text">
-                            <markdown mode="Full" source="@cat.Description" />
-                        </div>
-                        <a class="btn btn-secondary" asp-page="Index" asp-route-categoryUrl="@cat.UrlSegment">Zur Kategorie</a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}
-
-@if (Model.CurrentCategory != null)
-{
-    var cc = Model.CurrentCategory;
-    <div class="row mt-3">
-        <div class="col col-12">
-            <h2>@cc.Name</h2>
+<div class="d-flex flex-wrap align-content-stretch m-1">
+    @foreach (var cat in Model.Categories.OrderByDescending(x => x.SortKey).ThenBy(x => x.Name))
+    {
+        <div class="col-lg-6 my-1">
+            <partial name="Category/_Card" model="cat" />
         </div>
-        <div class="col col-1" condition="cc.LogoUrl">
-            <img src="@cc.LogoUrl" alt="Logo" />
+        <div class="col-lg-6 my-1">
+            <partial name="Category/_Card" model="cat" />
         </div>
-        <div class="col">
-            <markdown source="@cc.Description" mode="Full" />
-        </div>
-    </div>
-}
-
-@if (Model.CurrentCategory != null && !Model.Options.HidePosts)
-{
-    <div class="mt-3">
-        <if condition="Model.Posts">
-            @foreach (var post in Model.Posts.OrderByDescending(x => x.CreatedAt))
-            {
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col col-11">
-                                <b>@post.Title</b><br />
-                                @if (post.Category?.Id != Model.CurrentCategory?.Id)
-                                {
-                                    @post.Category?.Name
-                                }
-                            </div>
-                            <div class="col col-1 text-right">
-                                <i class="fa fa-comments-o"></i> @post.CommentCount
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col col-1 text-center">
-                                <if condition="post.UserVoted">
-                                    <i class="fa fa-chevron-up text-alert"></i>
-                                    <else>
-                                        <i class="fa fa-chevron-up"></i>
-                                    </else>
-                                </if><br />
-                                <span class="text-large">@post.VoteCount</span>
-                            </div>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <markdown mode="Simple" source="@post.Content" />
-                                    </div>
-                                    @if (post.Tags.Any())
-                                    {
-                                        <div class="col col-3">
-                                            @foreach (var tag in post.Tags.OrderBy(x => x.Name))
-                                            {
-                                                <span class="badge d-block mb-1"
-                                                      style="background-color: #@(tag.BackgroundColor); color: #@(tag.ForegroundColor)">
-                                                    @tag.Name
-                                                </span>
-                                            }
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-            <else>- Keine Beiträge -</else>
-        </if>
-    </div>
-}
-
-<div class="row mt-6">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core Razor Pages</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?linkid=852130">Working with Razor Pages.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure App Service</a></li>
-        </ul>
-    </div>
+    }
 </div>
+}
+
+<partial name="Category/_Description" model="categoryDescription" />
+
+@if (showPosts)
+{
+    @if (Model.Posts.Any())
+    {
+        @foreach (var post in Model.Posts.OrderByDescending(x => x.CreatedAt))
+        {
+            <partial name="Post/_Teaser" model="post" view-data="ViewData" />
+        }
+
+    }
+    else
+    {
+        <p>-Keine Beiträge -</p>
+    }
+}

@@ -1,0 +1,20 @@
+﻿@model ViewModel.Category
+
+<div class="border border-secondary">
+    <a class="d-block bg-light text-dark border-bottom px-3 py-2" asp-page="Index" asp-route-categoryUrl="@Model.UrlSegment">
+        <h2 class="h4 m-0">@Model.Name</h2>
+    </a>
+    <div class="d-flex flex-row p-1">
+        <div class="mr-3 mb-1">
+            <if condition="Model.LogoUrl">
+                <img alt="Category Logo" src="@Model.LogoUrl" height="64" width="64" />
+                <else>
+                    <img alt="Category Logo" src="~/images/Logo.svg" height="64" width="64" />
+                </else>
+            </if>
+        </div>
+        <div class="flex-grow-1">
+            <markdown mode="Full" source="@Model.Description" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+﻿@model ViewModel.ICategory
+
+<div class="row m-1">
+    <div class="col col-12">
+        <h2>@Model.Name</h2>
+    </div>
+    <div class="col col-1" condition="Model.LogoUrl">
+        <img src="@Model.LogoUrl" alt="Logo" />
+    </div>
+    <div class="col">
+        <markdown source="@Model.Description" mode="Full" />
+    </div>
+</div>

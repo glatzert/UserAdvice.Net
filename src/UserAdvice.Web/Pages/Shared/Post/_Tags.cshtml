@@ -1,0 +1,12 @@
+﻿@model IEnumerable<ViewModel.TagRef>
+
+@if (Model?.Any() ?? false)
+{
+    @foreach (var tag in Model.OrderBy(x => x.Name))
+    {
+        <span class="badge d-block mb-1"
+              style="background-color: #@(tag.BackgroundColor); color: #@(tag.ForegroundColor)">
+            @tag.Name
+        </span>
+    }
+}
